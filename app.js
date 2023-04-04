@@ -45,6 +45,11 @@ myForm.addEventListener("submit", function (event) {
       }
       return true;
     }
+    const existingRegister = registerList.find(existsAlready => existsAlready.Username === formData.get("Username"));
+  if (existingRegister) {
+    alert("Username already exists, please choose a different one");
+    return false;
+  }
     
 
     if (validateForm(formData)) {
