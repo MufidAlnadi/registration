@@ -4,8 +4,8 @@
 
 ## Tools
 - VScode
-_ Git & GitHub
-_ Regex
+- Git & GitHub
+- Regex
 - JS, HTML and Bootstrap 
 
 ## [LIVE](https://mufidalnadi.github.io/registration/)
