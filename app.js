@@ -1,91 +1,98 @@
-const myForm = document.getElementById("ffrom");
-const formData = new FormData(myForm);
 
+
+// Step 1: Create a Student constructor function
 function Register(Username, Email, Password, Phone) {
-  this.Username = Username;
-  this.Email = Email;
-  this.Password = Password;
-  this.Phone = Phone;
-}
-
-let registerList = [];
-
-myForm.addEventListener("submit", function(event) {
-  event.preventDefault();
-  
-  const username = formData.get("Username");
-  const email = formData.get("Email");
-  const password = formData.get("Password");
-  const phone = formData.get("Phone");
-  
- 
-  for (const register of registerList) {
-    if (register.Username === username) {
-      alert("Username already exists");
-      return;
-    }
+    this.Username = Username;
+    this.Email = Email;
+    this.Password = Password;
+    this.Phone = Phone;
   }
-  
-  const newRegister = new Register(username, email, password, phone);
-  registerList.push(newRegister);
-  
-  sessionStorage.setItem("registerList", JSON.stringify(registerList));
-  alert("Registration successful!");
-});
 
-function Regex(){
+const myForm = document.getElementById("ffrom");
+
+let registerList = JSON.parse(sessionStorage.getItem("registerList")) || [];
+
+
+
+myForm.addEventListener("submit", function (event) {
+  event.preventDefault();
+  const formData = new FormData(myForm);
+
+  function validateForm(formData) {
     const usernameRegex = /^\S*$/;
-  
     const passwordRegex = /^(?=.*[0-9])(?=.*[!@#$%^&*])(?=.*[A-Z])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,}$/; 
-    
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; 
     const phoneRegex = /^07\d{8}$/;
-
-    if (!usernameRegex.test(username)) {
+   
+    if (!usernameRegex.test(formData.get("Username"))) {
         alert("Username cannot contain spaces");
-        return;
+        return false;
       }
       
-      if (!passwordRegex.test(password)) {
+      if (!passwordRegex.test( formData.get("Password"))) {
         alert("Password must contain at least 8 characters, 1 number, 1 uppercase letter, and 1 special character");
-        return;
+        return false;
       }
       
-      if (!emailRegex.test(email)) {
+      if (!emailRegex.test(formData.get("Email"))) {
         alert("Invalid email address");
-        return;
+        return false;
       }
       
-      if (!phoneRegex.test(phone)) {
+      if (!phoneRegex.test(formData.get("Phone"))) {
         alert("Phone number must start with 07 and consist of 10 digits");
-        return;
+        return false;
       }
-      
-}
+      return true;
+    }
+    
 
-function renderCard(register) {
-    const card = document.createElement("div");
-    card.classList.add("card");
-    
-    const username = document.createElement("h2");
-    username.innerText = register.Username;
-    
-    const email = document.createElement("p");
-    email.innerText = `Email: ${register.Email}`;
-    
-    const phone = document.createElement("p");
-    phone.innerText = `Phone: ${register.Phone}`;
-    
-    card.appendChild(username);
-    card.appendChild(email);
-    card.appendChild(phone);
-    
-    return card;
-  }
-  const cardContainer = document.getElementById("card-container");
+    if (validateForm(formData)) {
+      let newRegister = new Register(
+        formData.get("Username"),
+        formData.get("Email"),
+        formData.get("Password"),
+        formData.get("Phone"),
+      );
+   
+    registerList.push(newRegister);
+    //stores the array in the sesstion Storage
+    sessionStorage.setItem("registerList", JSON.stringify(registerList));
+    renderRegister();
+   }
 
-  for (const register of registerList) {
-    const card = renderCard(register);
-    cardContainer.appendChild(card);
-  }
+
+});
+
+function renderRegister() {
+    for (const register of registerList) {
+        const card = document.getElementById("card");
+    const cont = document.createElement("div");
+    card.appendChild(cont)
+
+    const ul = document.createElement("ul");
+    cont.appendChild(ul);
+
     
+    const username = document.createElement("li");
+    username.innerHTML = register.Username;
+    ul.appendChild(username);
+
+    const email = document.createElement("li");
+    email.innerHTML  = `Email: ${register.Email}`;
+    ul.appendChild(email);
+
+    const phone = document.createElement("li");
+    phone.innerHTML  = `Phone: ${register.Phone}`;
+    ul.appendChild(phone);
+  
+    
+   
+    }
+    
+  }
+
+
+  window.onload = renderRegister;
+
+  
