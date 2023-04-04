@@ -9,6 +9,7 @@ function Register(Username, Email, Password, Phone) {
   }
 
 const myForm = document.getElementById("ffrom");
+
 let registerList = JSON.parse(sessionStorage.getItem("registerList")) || [];
 
 
@@ -55,6 +56,7 @@ myForm.addEventListener("submit", function (event) {
       );
    
     registerList.push(newRegister);
+    //stores the array in the sesstion Storage
     sessionStorage.setItem("registerList", JSON.stringify(registerList));
     renderRegister();
    }
