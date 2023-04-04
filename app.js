@@ -20,12 +20,18 @@ myForm.addEventListener("submit", function (event) {
 
   function validateForm(formData) {
     const usernameRegex = /^\S*$/;
-    const passwordRegex = /^(?=.*[0-9])(?=.*[!@#$%^&*])(?=.*[A-Z])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,}$/; 
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; 
+    const passwordRegex = /^(?=.*[0-9])(?=.*[!@#$%^&*])(?=.*[A-Z])[a-zA-Z0-9!@#$%^&*]{8,}$/; 
+
+    const emailRegex =/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/; 
+
     const phoneRegex = /^07\d{8}$/;
    
     if (!usernameRegex.test(formData.get("Username"))) {
         alert("Username cannot contain spaces");
+        return false;
+      } 
+      if (registerList.includes(formData.get("Username"))){
+        alert("Username already exists, please choose a different one");
         return false;
       }
       
@@ -45,6 +51,9 @@ myForm.addEventListener("submit", function (event) {
       }
       return true;
     }
+
+
+    // find is a method to search through the array and find an object with a Username property that matches the value.
     const existingRegister = registerList.find(existsAlready => existsAlready.Username === formData.get("Username"));
   if (existingRegister) {
     alert("Username already exists, please choose a different one");
