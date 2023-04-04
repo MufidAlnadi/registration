@@ -15,26 +15,50 @@ let registerList = JSON.parse(sessionStorage.getItem("registerList")) || [];
 
 myForm.addEventListener("submit", function (event) {
   event.preventDefault();
-
-  // Create new Student object from form data
   const formData = new FormData(myForm);
 
-  let newRegister = new Register(
-    formData.get("Username"),
-    formData.get("Email"),
-    formData.get("Password"),
-    formData.get("Phone"),
-  );
- 
-  
-  
+  function validateForm(formData) {
+    const usernameRegex = /^\S*$/;
+    const passwordRegex = /^(?=.*[0-9])(?=.*[!@#$%^&*])(?=.*[A-Z])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,}$/; 
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; 
+    const phoneRegex = /^07\d{8}$/;
+   
+    if (!usernameRegex.test(formData.get("Username"))) {
+        alert("Username cannot contain spaces");
+        return false;
+      }
+      
+      if (!passwordRegex.test( formData.get("Password"))) {
+        alert("Password must contain at least 8 characters, 1 number, 1 uppercase letter, and 1 special character");
+        return false;
+      }
+      
+      if (!emailRegex.test(formData.get("Email"))) {
+        alert("Invalid email address");
+        return false;
+      }
+      
+      if (!phoneRegex.test(formData.get("Phone"))) {
+        alert("Phone number must start with 07 and consist of 10 digits");
+        return false;
+      }
+      return true;
+    }
+    
+
+    if (validateForm(formData)) {
+      let newRegister = new Register(
+        formData.get("Username"),
+        formData.get("Email"),
+        formData.get("Password"),
+        formData.get("Phone"),
+      );
+   
     registerList.push(newRegister);
     sessionStorage.setItem("registerList", JSON.stringify(registerList));
     renderRegister();
-    Regex();
-   
-  
-  
+   }
+
 
 });
 
@@ -66,34 +90,7 @@ function renderRegister() {
     
   }
 
-  function Regex(){
-    const usernameRegex = /^\S*$/;
-    const passwordRegex = /^(?=.*[0-9])(?=.*[!@#$%^&*])(?=.*[A-Z])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,}$/; 
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; 
-    const phoneRegex = /^07\d{8}$/;
-    for (const register of registerList) {
-    if (!usernameRegex.test(register.Username)) {
-        alert("Username cannot contain spaces");
-        
-      }
-      
-      if (!passwordRegex.test(register.Password)) {
-        alert("Password must contain at least 8 characters, 1 number, 1 uppercase letter, and 1 special character");
-       
-      }
-      
-      if (!emailRegex.test(register.Email)) {
-        alert("Invalid email address");
-      
-      }
-      
-      if (!phoneRegex.test(register.Phone)) {
-        alert("Phone number must start with 07 and consist of 10 digits");
-      
-      }
-    
-    }
-  }
+
   window.onload = renderRegister;
 
   
