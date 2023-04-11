@@ -25,28 +25,33 @@ myForm.addEventListener("submit", function (event) {
     const emailRegex =/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/; 
 
     const phoneRegex = /^07\d{8}$/;
-   
+   const errorBox = document.getElementById("error-box");
     if (!usernameRegex.test(formData.get("Username"))) {
-        alert("Username cannot contain spaces");
+      errorBox.classList.remove("d-none");
+      errorBox.innerHTML = "Username cannot contain spaces";
         return false;
       } 
       if (registerList.includes(formData.get("Username"))){
-        alert("Username already exists, please choose a different one");
+        errorBox.classList.remove("d-none");
+        errorBox.innerHTML ="Username already exists, please choose a different one";
         return false;
       }
       
       if (!passwordRegex.test( formData.get("Password"))) {
-        alert("Password must contain at least 8 characters, 1 number, 1 uppercase letter, and 1 special character");
+        errorBox.classList.remove("d-none");
+        errorBox.innerHTML ="Password must contain at least 8 characters, 1 number, 1 uppercase letter, and 1 special character";
         return false;
       }
       
       if (!emailRegex.test(formData.get("Email"))) {
-        alert("Invalid email address");
+        errorBox.classList.remove("d-none");
+        errorBox.innerHTML ="Invalid email address";
         return false;
       }
       
       if (!phoneRegex.test(formData.get("Phone"))) {
-        alert("Phone number must start with 07 and consist of 10 digits");
+        errorBox.classList.remove("d-none");
+        errorBox.innerHTML ="Phone number must start with 07 and consist of 10 digits";
         return false;
       }
       return true;
@@ -56,7 +61,8 @@ myForm.addEventListener("submit", function (event) {
     // find is a method to search through the array and find an object with a Username property that matches the value.
     const existingRegister = registerList.find(existsAlready => existsAlready.Username === formData.get("Username"));
   if (existingRegister) {
-    alert("Username already exists, please choose a different one");
+    errorBox.classList.remove("d-none");
+    errorBox.innerHTML ="Username already exists, please choose a different one";
     return false;
   }
     
@@ -79,8 +85,10 @@ myForm.addEventListener("submit", function (event) {
 });
 
 function renderRegister() {
+  
     for (const register of registerList) {
         const card = document.getElementById("card");
+        card.classList.remove("d-none");
     const cont = document.createElement("div");
     card.appendChild(cont)
 
@@ -105,6 +113,17 @@ function renderRegister() {
     }
     
   }
+  function validateForm(formData) {
+    // other validation checks
+    if (!usernameRegex.test(formData.get("Username"))) {
+      const errorBox = document.getElementById("error-box");
+      errorBox.innerHTML = "Username cannot contain spaces";
+      errorBox.style.backgroundColor = "red"; // set the background color to red
+      return false;
+    }
+    // other validation checks
+  }
+  
 
 
   window.onload = renderRegister;
